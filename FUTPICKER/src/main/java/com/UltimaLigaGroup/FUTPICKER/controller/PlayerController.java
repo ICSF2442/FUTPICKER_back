@@ -2,6 +2,7 @@ package com.UltimaLigaGroup.FUTPICKER.controller;
 
 import com.UltimaLigaGroup.FUTPICKER.dto.PlayerDTO;
 import com.UltimaLigaGroup.FUTPICKER.dto.PlayerImportRequest;
+import com.UltimaLigaGroup.FUTPICKER.dto.UpdatePhotoRequest;
 import com.UltimaLigaGroup.FUTPICKER.service.PlayerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,11 @@ public class PlayerController {
     @PostMapping("/import")
     public List<PlayerDTO> importPlayers(@RequestBody PlayerImportRequest request) {
         return playerService.importFromFile(request);
+    }
+
+    @PutMapping("/{id}/photo")
+    public PlayerDTO updatePhoto(@PathVariable Long id, @RequestBody UpdatePhotoRequest request) {
+        return playerService.updatePhoto(id, request.getPhoto());
     }
 }
 

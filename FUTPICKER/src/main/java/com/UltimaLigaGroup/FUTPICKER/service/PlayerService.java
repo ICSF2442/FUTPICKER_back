@@ -97,6 +97,7 @@ public class PlayerService {
         player.setOvr(dto.getOvr());
         player.setArchetype(dto.getArchetype());
         player.setIsGoalkeeper(dto.getIsGoalkeeper() != null ? dto.getIsGoalkeeper() : false);
+        player.setPhoto(dto.getPhoto());
     }
 
     private PlayerDTO toDTO(Player player) {
@@ -110,10 +111,18 @@ public class PlayerService {
         dto.setOvr(player.getOvr());
         dto.setArchetype(player.getArchetype());
         dto.setIsGoalkeeper(player.getIsGoalkeeper());
+        dto.setPhoto(player.getPhoto());
         return dto;
     }
 
     public List<PlayerDTO> importFromFile(PlayerImportRequest request) {
         return bulkUpsert(request.getPlayers());
+    }
+
+    public PlayerDTO updatePhoto(Long id, String photo) {
+        Player player = playerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Player not found: " + id));
+        player.setPhoto(photo);
+        return toDTO(playerRepository.save(player));
     }
 }

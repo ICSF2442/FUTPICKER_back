@@ -13,6 +13,8 @@ public class PlayerDTO {
     private Integer ovr;
     private String archetype;
     private Boolean isGoalkeeper;
+    private String photo;
+
 
     public PlayerDTO() {}
 
@@ -34,4 +36,6 @@ public class PlayerDTO {
     public void setArchetype(String archetype) { this.archetype = archetype; }
     public Boolean getIsGoalkeeper() { return isGoalkeeper; }
     public void setIsGoalkeeper(Boolean isGoalkeeper) { this.isGoalkeeper = isGoalkeeper; }
+    public String getPhoto() { return photo; }
+    public void setPhoto(String photo) { this.photo = photo; }
 }

@@ -43,6 +43,10 @@ public class Player {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @Lob
+    @Column(name = "photo", columnDefinition = "LONGTEXT")
+    private String photo;
+
     public Player() {}
 
     public Long getId() { return id; }
@@ -65,4 +69,6 @@ public class Player {
     public void setIsGoalkeeper(Boolean isGoalkeeper) { this.isGoalkeeper = isGoalkeeper; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getPhoto() { return photo; }
+    public void setPhoto(String photo) { this.photo = photo; }
 }
