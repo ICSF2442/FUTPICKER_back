@@ -26,6 +26,16 @@ public class MatchController {
         return matchService.getAll();
     }
 
+    @GetMapping("/ongoing")
+    public List<MatchResultDTO> getOngoing() {
+        return matchService.getOngoing();
+    }
+
+    @GetMapping("/history")
+    public List<MatchResultDTO> getHistory() {
+        return matchService.getHistory();
+    }
+
     @GetMapping("/{id}")
     public MatchResultDTO getById(@PathVariable Long id) {
         return matchService.getById(id);
@@ -34,6 +44,11 @@ public class MatchController {
     @PutMapping("/{id}/score")
     public MatchResultDTO updateScore(@PathVariable Long id, @RequestBody UpdateScoreRequest request) {
         return matchService.updateScore(id, request);
+    }
+
+    @PutMapping("/{id}/details")
+    public MatchResultDTO updateDetails(@PathVariable Long id, @RequestBody UpdateMatchDetailsRequest request) {
+        return matchService.updateMatchDetails(id, request);
     }
 
     @GetMapping("/player/{playerId}/record")

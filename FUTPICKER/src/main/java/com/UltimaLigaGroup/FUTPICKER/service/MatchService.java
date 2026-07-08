@@ -10,6 +10,7 @@ import com.UltimaLigaGroup.FUTPICKER.repository.MatchRepository;
 import com.UltimaLigaGroup.FUTPICKER.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,8 +34,17 @@ public class MatchService {
         }
 
         Match match = new Match();
+        match.setName(request.getName());
+        match.setLocation(request.getLocation());
+        match.setTeamAColor(request.getTeamAColor());
+        match.setTeamBColor(request.getTeamBColor());
         match.setTeamAScore(request.getTeamAScore());
         match.setTeamBScore(request.getTeamBScore());
+
+        if (request.getMatchDate() != null && !request.getMatchDate().isBlank()) {
+            match.setMatchDate(LocalDate.parse(request.getMatchDate()));
+        }
+
         match = matchRepository.save(match);
 
         List<MatchPlayer> matchPlayers = new ArrayList<>();
@@ -59,6 +69,18 @@ public class MatchService {
                 .collect(Collectors.toList());
     }
 
+    public List<MatchResultDTO> getOngoing() {
+        return matchRepository.findByTeamAScoreIsNullOrTeamBScoreIsNullOrderByMatchDateDesc().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<MatchResultDTO> getHistory() {
+        return matchRepository.findByTeamAScoreIsNotNullAndTeamBScoreIsNotNullOrderByMatchDateDesc().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public MatchResultDTO getById(Long id) {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Match not found: " + id));
@@ -71,6 +93,41 @@ public class MatchService {
         match.setTeamAScore(request.getTeamAScore());
         match.setTeamBScore(request.getTeamBScore());
         match = matchRepository.save(match);
+        return toDTO(match);
+    }
+
+    public MatchResultDTO updateMatchDetails(Long id, UpdateMatchDetailsRequest request) {
+        Match match = matchRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Match not found: " + id));
+
+        match.setTeamAScore(request.getTeamAScore());
+        match.setTeamBScore(request.getTeamBScore());
+
+        if (request.getMvpPlayerId() != null) {
+            Player mvp = playerRepository.findById(request.getMvpPlayerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Player not found: " + request.getMvpPlayerId()));
+            match.setMvp(mvp);
+        } else {
+            match.setMvp(null);
+        }
+
+        match = matchRepository.save(match);
+
+        if (request.getPlayerStats() != null) {
+            List<MatchPlayer> matchPlayers = matchPlayerRepository.findByMatchId(id);
+            Map<Long, MatchPlayer> byPlayerId = matchPlayers.stream()
+                    .collect(Collectors.toMap(mp -> mp.getPlayer().getId(), mp -> mp));
+
+            for (PlayerMatchStatsDTO stat : request.getPlayerStats()) {
+                MatchPlayer mp = byPlayerId.get(stat.getPlayerId());
+                if (mp != null) {
+                    mp.setGoals(stat.getGoals() != null ? stat.getGoals() : 0);
+                    mp.setAssists(stat.getAssists() != null ? stat.getAssists() : 0);
+                }
+            }
+            matchPlayerRepository.saveAll(matchPlayers);
+        }
+
         return toDTO(match);
     }
 
@@ -101,13 +158,23 @@ public class MatchService {
     private MatchResultDTO toDTO(Match match) {
         MatchResultDTO dto = new MatchResultDTO();
         dto.setId(match.getId());
+        dto.setName(match.getName());
+        dto.setLocation(match.getLocation());
+        dto.setMatchDate(match.getMatchDate());
+        dto.setTeamAColor(match.getTeamAColor());
+        dto.setTeamBColor(match.getTeamBColor());
         dto.setPlayedAt(match.getPlayedAt());
         dto.setTeamAScore(match.getTeamAScore());
         dto.setTeamBScore(match.getTeamBScore());
 
+        if (match.getMvp() != null) {
+            dto.setMvpPlayerId(match.getMvp().getId());
+            dto.setMvpPlayerName(match.getMvp().getName());
+        }
+
         List<MatchPlayer> matchPlayers = matchPlayerRepository.findByMatchId(match.getId());
         List<MatchPlayerDTO> playerDTOs = matchPlayers.stream()
-                .map(mp -> new MatchPlayerDTO(mp.getPlayer().getId(), mp.getPlayer().getName(), mp.getTeam().name()))
+                .map(mp -> new MatchPlayerDTO(mp.getPlayer().getId(), mp.getPlayer().getName(), mp.getTeam().name(), mp.getGoals(), mp.getAssists()))
                 .collect(Collectors.toList());
         dto.setPlayers(playerDTOs);
 
