@@ -1,6 +1,7 @@
 package com.UltimaLigaGroup.FUTPICKER.service;
 
 import com.UltimaLigaGroup.FUTPICKER.dto.PlayerDTO;
+import com.UltimaLigaGroup.FUTPICKER.dto.PlayerImportRequest;
 import com.UltimaLigaGroup.FUTPICKER.entity.Player;
 import com.UltimaLigaGroup.FUTPICKER.entity.RatingHistory;
 import com.UltimaLigaGroup.FUTPICKER.exception.ResourceNotFoundException;
