@@ -1,0 +1,22 @@
+package com.UltimaLigaGroup.FUTPICKER.dto;
+
+public class MatchPlayerDTO {
+    private Long playerId;
+    private String name;
+    private String team;
+
+    public MatchPlayerDTO() {}
+
+    public MatchPlayerDTO(Long playerId, String name, String team) {
+        this.playerId = playerId;
+        this.name = name;
+        this.team = team;
+    }
+
+    public Long getPlayerId() { return playerId; }
+    public void setPlayerId(Long playerId) { this.playerId = playerId; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getTeam() { return team; }
+    public void setTeam(String team) { this.team = team; }
+}
