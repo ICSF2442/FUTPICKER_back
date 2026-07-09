@@ -7,6 +7,7 @@ public class UpdateMatchDetailsRequest {
     private Integer teamBScore;
     private Long mvpPlayerId;
     private List<PlayerMatchStatsDTO> playerStats;
+    private Boolean finish;
 
     public Integer getTeamAScore() { return teamAScore; }
     public void setTeamAScore(Integer teamAScore) { this.teamAScore = teamAScore; }
@@ -16,4 +17,6 @@ public class UpdateMatchDetailsRequest {
     public void setMvpPlayerId(Long mvpPlayerId) { this.mvpPlayerId = mvpPlayerId; }
     public List<PlayerMatchStatsDTO> getPlayerStats() { return playerStats; }
     public void setPlayerStats(List<PlayerMatchStatsDTO> playerStats) { this.playerStats = playerStats; }
+    public Boolean getFinish() { return finish; }
+    public void setFinish(Boolean finish) { this.finish = finish; }
 }

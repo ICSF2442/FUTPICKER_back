@@ -39,6 +39,9 @@ public class Match {
     @Column(name = "team_b_score")
     private Integer teamBScore;
 
+    @Column(nullable = false)
+    private Boolean finished = false;
+
     @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MatchPlayer> matchPlayers = new ArrayList<>();
 
@@ -74,4 +77,6 @@ public class Match {
     public void setTeamBScore(Integer teamBScore) { this.teamBScore = teamBScore; }
     public List<MatchPlayer> getMatchPlayers() { return matchPlayers; }
     public void setMatchPlayers(List<MatchPlayer> matchPlayers) { this.matchPlayers = matchPlayers; }
+    public Boolean getFinished() { return finished; }
+    public void setFinished(Boolean finished) { this.finished = finished; }
 }

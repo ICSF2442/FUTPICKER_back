@@ -16,6 +16,7 @@ public class MatchResultDTO {
     private LocalDateTime playedAt;
     private Integer teamAScore;
     private Integer teamBScore;
+    private Boolean finished;
     private List<MatchPlayerDTO> players;
 
     public Long getId() { return id; }
@@ -40,6 +41,8 @@ public class MatchResultDTO {
     public void setTeamAScore(Integer teamAScore) { this.teamAScore = teamAScore; }
     public Integer getTeamBScore() { return teamBScore; }
     public void setTeamBScore(Integer teamBScore) { this.teamBScore = teamBScore; }
+    public Boolean getFinished() { return finished; }
+    public void setFinished(Boolean finished) { this.finished = finished; }
     public List<MatchPlayerDTO> getPlayers() { return players; }
     public void setPlayers(List<MatchPlayerDTO> players) { this.players = players; }
 }

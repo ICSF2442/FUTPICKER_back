@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Match> findAllByOrderByPlayedAtDesc();
-    List<Match> findByTeamAScoreIsNullOrTeamBScoreIsNullOrderByMatchDateDesc();
-    List<Match> findByTeamAScoreIsNotNullAndTeamBScoreIsNotNullOrderByMatchDateDesc();
+    List<Match> findByFinishedFalseOrderByMatchDateDesc();
+    List<Match> findByFinishedTrueOrderByMatchDateDesc();
 }

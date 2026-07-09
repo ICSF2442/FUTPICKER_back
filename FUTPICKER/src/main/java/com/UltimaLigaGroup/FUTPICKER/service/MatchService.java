@@ -70,13 +70,13 @@ public class MatchService {
     }
 
     public List<MatchResultDTO> getOngoing() {
-        return matchRepository.findByTeamAScoreIsNullOrTeamBScoreIsNullOrderByMatchDateDesc().stream()
+        return matchRepository.findByFinishedFalseOrderByMatchDateDesc().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
     public List<MatchResultDTO> getHistory() {
-        return matchRepository.findByTeamAScoreIsNotNullAndTeamBScoreIsNotNullOrderByMatchDateDesc().stream()
+        return matchRepository.findByFinishedTrueOrderByMatchDateDesc().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -109,6 +109,10 @@ public class MatchService {
             match.setMvp(mvp);
         } else {
             match.setMvp(null);
+        }
+
+        if (Boolean.TRUE.equals(request.getFinish())) {
+            match.setFinished(true);
         }
 
         match = matchRepository.save(match);
@@ -166,6 +170,7 @@ public class MatchService {
         dto.setPlayedAt(match.getPlayedAt());
         dto.setTeamAScore(match.getTeamAScore());
         dto.setTeamBScore(match.getTeamBScore());
+        dto.setFinished(match.getFinished());
 
         if (match.getMvp() != null) {
             dto.setMvpPlayerId(match.getMvp().getId());
